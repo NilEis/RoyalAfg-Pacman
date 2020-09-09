@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mapmaker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div id="canvasDiv"></div>
+    <p id="pos"></p>
+    <button onclick="mirror()">Mirror</button>
+    <button onclick="init()">Reset</button>
+    <button onclick="(function(){lvl.coins.fill(false);lvl.coinAnzahl = 0;setCoins(lvl.pacmanStart.x, lvl.pacmanStart.y, 0)})();">Set Coins</button>
+    <button id="download" onclick="downloadObjectAsJson(lvl, 'level')">Download</button><br />
+    <button id="download" onclick="cell = 0">Pfad</button>
+    <button id="download" onclick="cell = 1">Wand</button>
+    <button id="download" onclick="cell = 2">Pacman</button>
+    <button id="download" onclick="cell = 3">Blinky</button>
+    <button id="download" onclick="cell = 4">Speedy</button>
+    <button id="download" onclick="cell = 5">Inky</button>
+    <button id="download" onclick="cell = 6">Clyde</button>
+    <input type="color" value="#0000ff" onchange="changeColor()" id="colorPicker">
+    <br />
+    <a href="docs/index.html">Doc</a>
+    <br/>
+    <div id="debug"></div>
+</body>
+<script src="js/draw/canvas.js"></script>
+<script src="js/Functions/jquery-3.5.0.min.js"></script>
+<script src="js/Functions/math.js"></script>
+<script src="js/Functions/Mouse.js"></script>
+<script src="js/Functions/random.js"></script>
+<script src="js/Functions/vector.js"></script>
+<script src="js/Functions/Array.js"></script>
+<script src="js/level.js"></script>
+<script src="js/main.js"></script>
+
+</html>

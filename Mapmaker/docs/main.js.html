@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: main.js</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="array.module_js.html">array.js</a></li><li><a href="math.module_js.html">math.js</a></li><li><a href="mouse.module_js.html">mouse.js</a></li></ul><h3>Classes</h3><ul><li><a href="canvasClass.html">canvasClass</a></li><li><a href="level.html">level</a></li><li><a href="random.html">random</a></li><li><a href="vector2D.html">vector2D</a></li><li><a href="vector3D.html">vector3D</a></li></ul><h3>Global</h3><ul><li><a href="global.html#pHeight">pHeight</a></li><li><a href="global.html#pWidth">pWidth</a></li><li><a href="global.html#spalten">spalten</a></li><li><a href="global.html#tilesize">tilesize</a></li><li><a href="global.html#zeilen">zeilen</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>main.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Gibt die größe der einzelnen Felder an
+ * @constant {number} tilesize
+ */
+const tilesize = 20;
+
+/**
+ * @constant {number} pWidth Ist die Breite des Fensters
+ */
+const pWidth = window.innerWidth;
+/**
+ * @constant {number} pHeight Ist die Höhe des Fensters
+ */
+const pHeight = window.innerHeight;
+
+/**
+ * Gibt die Anzahl der Zeilen an
+ * @constant {number} zeilen
+ */
+const zeilen = 31;
+/**
+ * Gibt die Anzahl der Spalten an
+ * @constant {number} spalten
+ */
+const spalten = 28;
+
+const c = new canvasClass("canvas", spalten * tilesize, zeilen * tilesize, "white");
+
+var cell = 1;
+
+var lvl;
+
+
+var wallColor = document.getElementById("colorPicker").value;
+
+function init() {
+    lvl = new level(generateArray(spalten, zeilen, 0), null, null, null, null, null, null, null, null, null, null, "blue", 0);
+    lvl.grid[0].fill(1);
+    lvl.grid[zeilen - 1].fill(1);
+    for (let y = 1; y &lt; zeilen - 1; y++) {
+        lvl.grid[y][0] = 1;
+        lvl.grid[y][spalten - 1] = 1;
+    }
+}
+
+
+function draw() {
+    if (mouseDown)
+        switchCell();
+    //c.cls();
+    c.fillArray(lvl.grid, ["black", wallColor, "red"]);
+    c.drawCell(mPos.x, mPos.y, "white");
+    c.fillCell(lvl.pacmanStart.x, lvl.pacmanStart.y, "yellow");
+    c.fillCell(lvl.blinkyStart.x, lvl.blinkyStart.y, "red");
+    c.fillCell(lvl.speedyStart.x, lvl.speedyStart.y, "pink");
+    c.fillCell(lvl.inkyStart.x, lvl.inkyStart.y, "blue");
+    c.fillCell(lvl.clydeStart.x, lvl.clydeStart.y, "orange");
+    document.getElementById("pos").innerHTML = "Position: " + mPos.x + ", " + mPos.y;
+}
+
+function changeColor() {
+    wallColor = document.getElementById("colorPicker").value;
+}
+
+function toCell(x, y) {
+    return new vector2D(Math.floor(x / tilesize), Math.floor(y / tilesize));
+}
+
+function switchCell() {
+    if (mouseX > 0 &amp;&amp; mouseX &lt; c.width &amp;&amp; mouseY > 0 &amp;&amp; mouseY &lt; c.height) {
+        if (cell == 0 || cell == 1)
+            lvl.grid[mPos.y][mPos.x] = cell;
+        else if (cell == 2)
+            lvl.pacmanStart = mPos;
+        else if (cell == 3)
+            lvl.blinkyStart = mPos;
+        else if (cell == 4)
+            lvl.speedyStart = mPos;
+        else if (cell == 5)
+            lvl.inkyStart = mPos;
+        else if (cell == 6)
+            lvl.clydeStart = mPos;
+    }
+}
+
+function fill(x, y, c) {
+    if (lvl.grid[y][x] == c) {
+        lvl.grid[y][x] = (c == 0 ? 1 : 0);
+        //Mit Diagonal
+        /*
+        for (let _y = -1; _y &lt;= 1; _y++) {
+            for (let _x = -1; _x &lt;= 1; _x++) {
+                setTimeout(fill, 25, x + _x, y + _y, c);
+            }
+        }
+        */
+        //Nicht Diagonal
+        //Rechts
+        setTimeout(fill, 25, x + 1, y, c);
+        //Unten
+        setTimeout(fill, 25, x, y + 1, c);
+        //Links
+        setTimeout(fill, 25, x - 1, y, c);
+        //Oben
+        setTimeout(fill, 25, x, y - 1, c);
+    }
+}
+
+function setCoins(x, y, c) {
+    if (lvl.grid[y][x] == c &amp;&amp; lvl.coins[xyToI(x, y, spalten)] == false) {
+        lvl.coins[xyToI(x, y, spalten)] = true;
+        lvl.coinAnzahl++;
+        //Mit Diagonal
+        /*
+        for (let _y = -1; _y &lt;= 1; _y++) {
+            for (let _x = -1; _x &lt;= 1; _x++) {
+                setTimeout(setCoins, 25, x + _x, y + _y, c);
+            }
+        }
+        */
+        //Nicht Diagonal
+        //Rechts
+        setTimeout(setCoins, 25, x + 1, y, c);
+        //Unten
+        setTimeout(setCoins, 25, x, y + 1, c);
+        //Links
+        setTimeout(setCoins, 25, x - 1, y, c);
+        //Oben
+        setTimeout(setCoins, 25, x, y - 1, c);
+    }
+}
+
+function downloadObjectAsJson(exportObj, exportName) {
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+    let a = document.createElement('a');
+    a.setAttribute("href", dataStr);
+    a.setAttribute("download", exportName + ".json");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    let waende = 0;
+    let weg = 0;
+    for (let y = 0; y &lt; lvl.grid.length; y++) {
+        for (let x = 0; x &lt; lvl.grid[0].length; x++) {
+            if (lvl.grid[y][x] == 1) {
+                waende++;
+            } else {
+                weg++;
+            }
+        }
+    }
+    document.getElementById("debug").innerHTML = "Münzen: " + lvl.coinAnzahl + "\n";
+    document.getElementById("debug").innerHTML += "Wege: " + weg + "\n";
+    document.getElementById("debug").innerHTML += "Wände: " + waende + "\n";
+}
+
+
+function loadLevel(data) {
+    if (typeof data === 'string')
+        obj = JSON.parse(data);
+    else
+        obj = data;
+    lvl = level.from(obj);
+}
+
+function sCoins() {
+    lvl.coins.fill(false);
+    lvl.coinAnzahl = 0;
+    for (let y = 0; y &lt; lvl.grid.length; y++) {
+        for (let x = 0; x &lt; lvl.grid[0].length; x++) {
+            if (lvl.grid[y][x] == 0) {
+                setTimeout(() => {
+                    lvl.coins[xyToI(x, y, spalten)] = true;
+                    lvl.coinAnzahl++;
+                }, 500);
+                wait(1);
+            }
+        }
+    }
+}
+
+
+init();
+
+var drawIntervall = setInterval(draw, 2);</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun May 24 2020 20:50:50 GMT+0200 (Mitteleuropäische Sommerzeit)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
