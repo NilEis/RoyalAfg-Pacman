@@ -180,7 +180,7 @@ function tick() {
         c.cls();
         c.fillArray(lvl.grid, ["black", lvl.color, "red"], tilesize, tilesize, constXOffset, constYOffset);
         c.fillText(constXOffset, constYOffset, "Score: " + points, "20px Arial", "white");
-        c.fillText(constXOffset + canvasWidth / 2, constYOffset, "Lives: 3", "20px Arial", "white");
+        c.fillText(constXOffset + (canvasWidth - constXOffset * 1.15) / 2, constYOffset, "Lives: 3", "20px Arial", "white");
         bug();
     }
     if (lvl.coins[xyToI(vPacman.cell.x, vPacman.cell.y, spalten)]) {
@@ -217,23 +217,25 @@ function tick() {
  */
 function nextLevel() {
     stop();
-    if (!lvlList[lvlIndex])
-        lvlIndex = 0;
-    loadJSON(lvlList[lvlIndex], loadLevel);
+    if (lvlIndex == 256)
+        bbug = true;
+    else
+        bbug = false;
+    loadJSON(lvlList[lvlIndex % lvlList.length], loadLevel);
 }
 
-function loadJSON(file,callback) {   
+function loadJSON(file, callback) {
 
     var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
+    xobj.overrideMimeType("application/json");
     xobj.open('GET', file, false);
     xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
+        if (xobj.readyState == 4 && xobj.status == "200") {
             callback(xobj.responseText);
-          }
+        }
     };
-    xobj.send(null);  
- }
+    xobj.send(null);
+}
 
 var ghostMode;
 
