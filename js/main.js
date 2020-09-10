@@ -170,7 +170,7 @@ function tick() {
         key = "right";
     if (keyCodes["r"]) {
         keyCodes["r"] = false;
-        init();
+        reset();
     }
     if (keyCodes["f"]) {
         keyCodes["f"] = false;
