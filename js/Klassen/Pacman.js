@@ -38,7 +38,7 @@ class pacman extends obj {
          * @private
          */
         this.name = "Pacman";
-        this.vGeschwind = 10;
+        this.vGeschwind = 5;
     }
 
     /**
@@ -97,7 +97,7 @@ class pacman extends obj {
      * @param {number} pctOpen Die Öffnung des Munds in Prozent
      */
     drawPacman(pctOpen) {
-        const geschwindigkeit = Math.ceil(frameTime * this.vGeschwind);
+        const geschwindigkeit = Math.ceil(frameTime * (this.vGeschwind * 2));
         c.ctx.translate(this.location.x + constXOffset, this.location.y + constYOffset);
         if (this.velocity.x == 0)
             c.ctx.rotate((this.velocity.y == geschwindigkeit ? 90 : 270) * Math.PI / 180);
@@ -113,8 +113,10 @@ class pacman extends obj {
 
         c.ctx.fillStyle = "#FFFF00";
         c.ctx.fill();
-        if (pctOpen % 100 == 0) {
-            this.dir = -this.dir;
+        this.pctOpen = Math.max(0, Math.min(100, pctOpen));
+        
+        if (pctOpen % 100==0) {
+            this.dir *= -1;
         }
     }
 }
