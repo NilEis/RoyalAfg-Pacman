@@ -89,38 +89,15 @@ class ghost extends obj {
 
             //Erste Möglichkeit zum Berechnen der neuen Richtung.
             if (origPath) {
-                let dirArray = [];
-                if (this.velocity.x != 0) {
-                    let oben = vector2D.add(this.cell, new vector2D(0, -1));
-                    if (lvl.grid[oben.y][oben.x] != 1)
-                        dirArray.push([euclideanDistance(oben.x, oben.y, this.ziel[0], this.ziel[1]), vector2D.sub(oben, this.cell)]);
-                    let unten = vector2D.add(this.cell, new vector2D(0, 1));
-                    if (lvl.grid[unten.y][unten.x] != 1)
-                        dirArray.push([euclideanDistance(unten.x, unten.y, this.ziel[0], this.ziel[1]), vector2D.sub(unten, this.cell)]);
-                    if (this.velocity.x > 0) {
-                        let rechts = vector2D.add(this.cell, new vector2D(1, 0));
-                        if (lvl.grid[rechts.y][rechts.x] != 1)
-                            dirArray.push([euclideanDistance(rechts.x, rechts.y, this.ziel[0], this.ziel[1]), vector2D.sub(rechts, this.cell)]);
-                    }
-                } else {
-                    let links = vector2D.add(this.cell, new vector2D(-1, 0));
-                    if (lvl.grid[links.y][links.x] != 1)
-                        dirArray.push([euclideanDistance(links.x, links.y, this.ziel[0], this.ziel[1]), vector2D.sub(links, this.cell)]);
-                    let rechts = vector2D.add(this.cell, new vector2D(1, 0));
-                    if (lvl.grid[rechts.y][rechts.x] != 1)
-                        dirArray.push([euclideanDistance(rechts.x, rechts.y, this.ziel[0], this.ziel[1]), vector2D.sub(rechts, this.cell)]);
-                    if (this.velocity.y > 0) {
-                        let unten = vector2D.add(this.cell, new vector2D(0, 1));
-                        if (lvl.grid[unten.y][unten.x] != 1)
-                            dirArray.push([euclideanDistance(unten.x, unten.y, this.ziel[0], this.ziel[1]), vector2D.sub(unten, this.cell)]);
-                    }
-                }
-                dirArray.sort(function (a, b) {
-                    return a[0] - b[0];
-                });
-
-                console.log(dirArray[0][0] + ", " + dirArray[dirArray.length - 1][0]);
-                this.velocity = dirArray[0][1].get();
+                const richtungen = [];
+                //Links
+                richtungen.push(new vector2D(-1,0));
+                //Rechts
+                richtungen.push(new vector2D(1,0));
+                //Oben
+                richtungen.push(new vector2D(0,-1));
+                //Unten
+                richtungen.push(new vector2D(0,1));
             } else {
                 //Zweite Möglichkeit
                 this.path = this.easystar.findPath(this.cell.x, this.cell.y, this.ziel[0], this.ziel[1], this.parsePath, this);
