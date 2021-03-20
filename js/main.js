@@ -180,7 +180,7 @@ function tick() {
         c.cls();
         c.fillArray(lvl.grid, ["black", lvl.color, "red"], tilesize, tilesize, constXOffset, constYOffset);
         c.fillText(constXOffset, constYOffset, "Score: " + points, "20px Arial", "white");
-        c.fillText(constXOffset + (canvasWidth - constXOffset * 1.15) / 2, constYOffset, "Lives: 3", "20px Arial", "white");
+        c.fillText(constXOffset + (canvasWidth - constXOffset * 1.15) / 2, constYOffset, "Lives: "+vPacman.lives, "20px Arial", "white");
         bug();
     }
     if (lvl.coins[xyToI(vPacman.cell.x, vPacman.cell.y, spalten)]) {
@@ -200,8 +200,22 @@ function tick() {
     });
     for (let i = 1; i < objects.length; i++) {
         if (!debug && objects[i].cell.cmp(vPacman.cell)) {
-            stop();
-            alert("Du hast verloren.");
+            vPacman.lives--;
+            if (vPacman.lives > 0) {
+                vPacman.location.x = lvl.pacmanStart.x * tilesize + tilesize / 2;
+                vPacman.location.y = lvl.pacmanStart.y * tilesize + tilesize / 2;
+                vBlinky.location.x = lvl.blinkyStart.x * tilesize + tilesize / 2;
+                vBlinky.location.y = lvl.blinkyStart.y * tilesize + tilesize / 2;
+                objects.pop();
+                objects.pop();
+                objects.pop();
+                objects.push(new clyde(lvl.clydeStart.x * tilesize + tilesize / 2, lvl.clydeStart.y * tilesize + tilesize / 2, 0, 1, vPacman));
+                objects.push(new pinky(lvl.speedyStart.x * tilesize + tilesize / 2, lvl.speedyStart.y * tilesize + tilesize / 2, 0, 1, vPacman));
+                objects.push(new inky(lvl.inkyStart.x * tilesize + tilesize / 2, lvl.inkyStart.y * tilesize + tilesize / 2, 1, 1, vPacman, vBlinky));
+            } else {
+                stop();
+                alert("Du hast verloren.");
+            }
         }
     }
     if (lvl.coinAnzahl == 0)

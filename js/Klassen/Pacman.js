@@ -39,6 +39,7 @@ class pacman extends obj {
          */
         this.name = "Pacman";
         this.vGeschwind = 5;
+        this.lives = 3;
     }
 
     /**
